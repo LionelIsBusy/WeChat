@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>   @*显示在手机框最上方中间的*@
+    <script src="Scripts/jquery-3.3.1.js"></script>
+    <script src="Scripts/JS-SDK.js">
+        var data = '@Html.Raw(ViewData["JsApiirray"].ToString())';
+        data = eval("(" + data + ")");//实例化
+        wxconfig(data);
+    </script>
+
+    <!--<script type="text/javascript">
+        //获取用户信息
+        function GetUserInfo() {
+            var str = $("#nickname").text();
+            alert(str);
+        }
+    </script>-->
+
+</head>
+
+<body>
+    <button onclick="GetUserInfo()">点击</button>
+
+    <div>
+        <p id="nickname">1</p>
+    </div>
+    <div>
+        <p id="nickname">2</p>
+    </div>
+    <div>
+        <p id="nickname">3</p>
+    </div>
+    <div>
+        <p id="nickname">4</p>
+    </div>
+    <div>
+        <p id="nickname">5</p>
+    </div>
+</body>
+
+
+</html>

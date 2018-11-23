@@ -1,0 +1,147 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>JS_SDK测试页面</title>   @*显示在手机框最上方中间的*@
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="bookmark" href="/favicon.ico" type="image/x-icon" />
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/JS-SDK.js"></script>
+    <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+
+    @*<script src="~/Scripts/JS-SDK.js">
+            var data = '@Html.Raw(ViewData["JsApiirray"].ToString())';
+            data = eval("(" + data + ")");//实例化
+            wxconfig(data);
+        </script>*@
+
+
+    <script type="text/javascript">
+        $(function () {
+                var data = '@Html.Raw(ViewData["JsApiirray"].ToString())';
+                data = eval("(" + data + ")");//实例化
+                wxconfig(data);
+            var serverId;
+            var localId;
+        })
+        function shareToWeChat(){
+            //转发给朋友
+            wx.onMenuShareAppMessage({
+                title: 'JSSDK转发测试',
+                desc: '转发给朋友',
+                link: 'http://lionel123.cn/Demo/JSSDK/Index/',
+                imgUrl: '../Images/wechat.jpg',
+                type: 'link',
+                dataUrl: '',
+                success: function () {
+                    alert('转发成功！');
+                },
+                cancel: function () {
+                    alert('转发失败！');
+                }
+            });
+        }
+
+        function chooseImage() {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localId = res.localIds[0]; //集合 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                }
+            });
+        }
+
+        function previewImage() {
+            wx.previewImage({
+                current: '', // 当前显示图片的http链接
+                urls: [] // 需要预览的图片http链接列表
+            });
+        }
+
+        function uploadImage() {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    //选好照片后上传
+                    var localIds = res.localIds[0]; //集合 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    wx.uploadImage({
+                        localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            serverId = res.serverId; // 返回图片的服务器端ID
+                            //$("#image1").attr("src", "~/Images/wechat.jpg");//无法替换
+                            $("#image1").attr("src",'@Url.Content("~/Images/wechat.jpg")');//服务器解析时会解析成下面的样子
+                            //$("#image1").attr("src", "/Demo/Images/wechat.jpg"); //微信处理时地址为http://lionel123.cn/Demo/JSSDK/Index/  多了一个斜杠 所以图片地址必须这样写（）
+                        },
+                        Error: function (res) {
+                            alert(JSON.stringify(res));
+                        }
+                    });
+                }
+            });
+        }
+
+        function downloadImage() {
+            wx.downloadImage({
+                serverId: serverId, // 需要下载的图片的服务器端ID，由uploadImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    localId = res.localId; // 返回图片下载后的本地ID
+                    alert("下载完成！" + serverId);
+                }
+            });
+        }
+
+        function getLocalImgData() {
+            wx.getLocalImgData({
+                localId: localId, // 图片的localID
+                success: function (res) {
+                    var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+                    $("#image2").attr("src", localData);
+                }
+            });
+        }
+
+        function scanQRCode() {
+            wx.scanQRCode({
+                needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                }
+            });
+        }
+
+    </script>
+
+</head>
+<body>
+    <div>
+        <p>Hello WeChat!</p>
+    </div>
+    <div><button type="button" onclick="chooseImage()">选择图片</button></div>
+    <div>
+        <a href="javascript:void(0);" title="分享至微信" onclick="shareToWeChat()"><img height="20" src="~/Images/wechat.jpg" alt="" /></a>
+    </div>
+    <div><button type="button" onclick="chooseImage()">预览图片</button></div>
+    <div><button type="button" onclick="uploadImage()">上传图片</button></div>
+    <div><img height="50" id="image1" src="~/Images/test1.png" alt="" /></div>   @*src属性值不识别../Images/test1.png ???*@
+    <div><button type="button" onclick="downloadImage()">下载图片</button></div>
+    <div><button type="button" onclick="getLocalImgData()">获取本地图片</button></div>
+    <div><img id="image2" height="50" src="" /></div>
+    <div><button type="button" onclick="scanQRCode()">扫一扫</button></div>
+</body>
+</html>
+
+

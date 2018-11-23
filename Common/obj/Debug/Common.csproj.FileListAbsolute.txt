@@ -1,0 +1,6 @@
+D:\C#\VS documents\WeChat\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+D:\C#\VS documents\WeChat\Common\bin\Debug\Common.dll
+D:\C#\VS documents\WeChat\Common\bin\Debug\Common.pdb
+D:\C#\VS documents\WeChat\Common\obj\Debug\Common.dll
+D:\C#\VS documents\WeChat\Common\obj\Debug\Common.pdb
+D:\C#\VS documents\WeChat\Common\obj\Debug\Common.csprojAssemblyReference.cache

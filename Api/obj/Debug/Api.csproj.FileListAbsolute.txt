@@ -1,0 +1,11 @@
+D:\C#\VS documents\WeChat\Api\bin\Debug\Api.dll
+D:\C#\VS documents\WeChat\Api\bin\Debug\Api.pdb
+D:\C#\VS documents\WeChat\Api\bin\Debug\Common.dll
+D:\C#\VS documents\WeChat\Api\bin\Debug\Newtonsoft.Json.dll
+D:\C#\VS documents\WeChat\Api\bin\Debug\Common.pdb
+D:\C#\VS documents\WeChat\Api\bin\Debug\Newtonsoft.Json.xml
+D:\C#\VS documents\WeChat\Api\obj\Debug\Api.csprojAssemblyReference.cache
+D:\C#\VS documents\WeChat\Api\obj\Debug\Api.csproj.CoreCompileInputs.cache
+D:\C#\VS documents\WeChat\Api\obj\Debug\Api.csproj.CopyComplete
+D:\C#\VS documents\WeChat\Api\obj\Debug\Api.dll
+D:\C#\VS documents\WeChat\Api\obj\Debug\Api.pdb

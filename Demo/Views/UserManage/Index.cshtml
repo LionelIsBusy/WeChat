@@ -1,0 +1,152 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>   @*显示在手机框最上方中间的*@
+    <link href="~/Content/weui.css" rel="stylesheet" />
+    <link href="~/Content/weui.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#userInfo").css("display", "none");
+        })
+
+        //获取用户列表
+        function GetAllUserID() {
+            // 获取所有id的P元素
+            var element,
+                pElements = document.getElementsByClassName("idClass");
+            // 删除所有id的P元素
+            while (pElements.length > 0) {
+                element = pElements[0];
+                element.parentElement.removeChild(element);
+            }
+
+            $.ajax({
+                url: '@Url.Action("GetAllUserID","UserManage")',
+                type:"post",
+                success: function (data) {
+                    //$("#openid").remove(); //每次点击之后 先清空一下
+                    for (var i = 0; i < data.length; i++) {
+                        var userid = data[i];
+                        //往div下追加p标签 p标签设置点击事件 执行获取用户信息的方法（有参数）   每个p标签都设置不同的id编号   openid0 openid1、、、
+                        $(".weui-cell_select").append("<p onclick='GetUserInfo(" + i + ")' class='idClass' id='openid" + i + "'>" + userid + "</p>");
+                    }
+                    //alert(data[0]);
+                },
+                error: function () {
+                    alert("出错啦，请刷新页面，重试");
+                },
+            });
+        }
+        ////???
+        //$(function () {
+        //    bindClickEvent();
+        //});
+        //function bindClickEvent() {
+        //    $("#aa").click(function (data) {
+        //        var url = $(this).attr("url");
+        //        alert(data[0]);
+        //        return;
+        //    });
+        //}
+
+        @*//获取用户信息(批量)
+        function GetUserInfo() {
+            $("#userInfo").css("display", "block");
+            // 获取所有id的P元素  
+            var pElements = document.getElementsByClassName("idClass");
+            var openidStr="openidStr=";
+            for (var i = 0; i < pElements.length; i++) {
+                var openidI = $("#openid" + i).text() 
+                openidStr += openidI + ","; //将所有的openid拼接成字符串 传递到后台
+            }
+            $.ajax({
+                url: '@Url.Action("GetUserInfo","UserManage")',
+                type: "post",
+                //data: "openid="+$("#openid").text(), //post方式提交 向后台传递数据 (这样不会批量获取)
+                data: openidStr,
+                success: function (data) {
+                    //alert(data.Nickname);
+                    $("#nickname").text(data.Nickname); //设置p标签中的内容
+                    $(".weui-cell__hd img").attr("src", data.Headimgurl); //设置img标签的src属性
+                },
+                error: function () {
+                    alert("出错啦，请刷新页面，重试");
+                },
+            });
+        }*@
+        //获取用户信息（单个）
+        function GetUserInfo(i) {
+            $("#userInfo").css("display", "block");
+            //$("#nickname").text(data.Nickname); //清除p标签中的内容
+            //$(".weui-cell__hd img").attr("src", ""); //清除img标签的src属性
+            $.ajax({
+                url: '@Url.Action("GetUserInfo","UserManage")',
+                type: "post",
+                data: "openidI=" + $("#openid" + i).text(), //post方式提交 向后台传递数据 (这样不会批量获取)
+                success: function (data) {
+                    //alert(data.Nickname);
+                    $("#nickname").text(data.Nickname); //设置p标签中的内容
+                    $(".weui-cell__hd img").attr("src", data.Headimgurl); //设置img标签的src属性
+                },
+                error: function () {
+                    alert("出错啦，请刷新页面，重试");
+                },
+            });
+        }
+
+
+    </script>
+</head>
+
+<body>
+    @*<div style="text-align:center">
+            <input id="Button1" type="button" value="获取用户基本信息" />
+        </div>
+        <div style="text-align:center">
+            <input id="Button2" type="button" value="获取用户列表" />
+        </div>
+        <div style="text-align:center">
+            <input id="Button3" type="button" value="获取用户位置信息" />
+        </div>
+        <div style="text-align:center">
+            <input id="Button4" type="button" value="设置用户备注名" />
+        </div>*@
+    <div class="page">
+        <div><h1 style="text-align:center">用户管理</h1></div><br />
+        <div class="page__bd page__bd_spacing">
+            <a href="javascript:void(0)" onclick="GetAllUserID()" class="weui-btn weui-btn_primary">获取用户列表</a>
+            <a href="javascript:void(0)" class="weui-btn weui-btn_primary">获取用户基本信息</a>
+            <a href="javascript:void(0)" onclick="GetUserRemark()" class="weui-btn weui-btn_primary">设置用户备注名</a>
+            <a href="javascript:void(0)" onclick="GetUserPosition()" class="weui-btn weui-btn_primary">获取用户位置信息</a>
+        </div>
+    </div>
+    <div class="page">
+        <div class="page__bd">
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell_select">
+                        @*<p id="openid"></p>*@
+                    </div>
+                </div>
+                <div id="userInfo" class="weui-cell">
+                    <div class="weui-cell__hd" style="float:left"><img src="" alt="" style="width:20px;margin-right:5px;display:block"></div>
+                    <div class="weui-cell__bd">
+                        <p id="nickname">标题文字</p>
+                    </div>
+                    <div class="weui-cell__ft">说明文字</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>
